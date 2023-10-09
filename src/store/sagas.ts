@@ -1,29 +1,21 @@
 import {getTopHeadlineRequest} from '../api';
-import * as effects from '@redux-saga/core/effects';
+import {put, takeLatest, all, call} from '@redux-saga/core/effects';
 import {ACTypes} from './types';
 import {IData, IDataDrivers, IPaginationsProps} from './interfaces';
-
-const {put, takeLatest, all, call} = effects;
+import {apiFailure, apiListEnd, apiSuccessRequest} from './action';
 
 function* getTopHeadline({payload}: IPaginationsProps) {
   try {
     const res: IData = yield call(getTopHeadlineRequest, payload);
-    // console.log('>>>>>>>>>>>>>>>', res.data.MRData.DriverTable.Drivers);
     const data: IDataDrivers = res.data.MRData;
 
     if (data.DriverTable.Drivers.length > 0) {
-      yield put({
-        type: ACTypes.API_SUCCESS,
-        data: data,
-      });
+      yield put(apiSuccessRequest(data));
     } else {
-      yield put({type: ACTypes.API_LIST_END});
+      yield put(apiListEnd());
     }
-  } catch (err: unknown) {
-    yield put({
-      type: ACTypes.API_FAILURE,
-      error: err instanceof Error ? err.message : 'unknown error',
-    });
+  } catch (err) {
+    yield put(apiFailure(err));
   }
 }
 

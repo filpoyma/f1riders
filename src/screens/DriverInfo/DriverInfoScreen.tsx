@@ -1,10 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {
-  NativeStackScreenProps,
-  NativeStackNavigationProp,
-} from 'react-native-screens/native-stack';
+import {NativeStackScreenProps} from 'react-native-screens/native-stack';
 
 import {RootState} from '../../store';
 import {IDriver} from '../../store/interfaces';
@@ -19,7 +16,7 @@ export type DriverInfoScreenProps = NativeStackScreenProps<
 >;
 
 const DriverInfoScreen: React.FC<DriverInfoScreenProps> = ({route}) => {
-  const driverId = route.params.driverId;
+  const {driverId} = route.params;
   const driver = useSelector<RootState, IDriver | undefined>(
     (state: RootState) =>
       state.drivers.data.find(driver => driver.driverId === driverId),
