@@ -8,7 +8,7 @@ export const getTopHeadlineRequest = async (
 ): Promise<IData> => {
   return axios.get(endpoint, {
     params: {
-      limit: 5,
+      limit: params.limit,
       offset: params.offset,
     },
   });
